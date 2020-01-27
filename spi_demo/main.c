@@ -198,17 +198,8 @@ static void SlaveIntHandler()
 //! \return None.
 //
 //*****************************************************************************
-int MasterMain()
+int ballMain()
 {
-    printf("in master main\n");
-
-
-    //
-    // Set Tx buffer index
-    //
-    ucTxBuffNdx = 0;
-    ucRxBuffNdx = 0;
-
     //
     // Reset SPI
     //
@@ -232,12 +223,13 @@ int MasterMain()
     I2C_IF_Open(I2C_MASTER_MODE_FST);
 
     Adafruit_Init();
-
+    
+    //variables to make I2C calls to specific registers, as well as two character buffers for I2C output
     unsigned char ucDevAddr, ucRegOffset, ucRdLen;
     unsigned char dataBufXPos[256];
     unsigned char dataBufYPos[256];
 
-
+    //constants
     ucDevAddr = 0x18;
     ucRdLen = 1;
 
@@ -250,8 +242,10 @@ int MasterMain()
     //set to center
     xPos = 64;
     yPos = 64;
-
+    
+    //make the screen empty
     fillScreen(BLACK);
+    //initial center circle
     drawCircle(xPos, yPos, 2, BLUE);
     while(1){
         ucRegOffset = 0x3;
@@ -291,12 +285,12 @@ int MasterMain()
         }
 
         xOffset = (int)xSpeed * speed;
-
-//        xOffset = xDist - xOld;
-//        yOffset = yDist - yOld;
+        
+        //adjustment based on computed offset value
         yPos += yOffset;
         xPos += xOffset;
-
+        
+        //out of bounds checking just keeps the ball in the corners/edges
         if(xPos < 2 || xPos > 126){
             xPos = xOld;
         }
@@ -304,7 +298,8 @@ int MasterMain()
         if(yPos < 2 || yPos > 126){
             yPos = yOld;
         }
-
+        
+        //clear old circle position and draw new one
         drawCircle(yOld, xOld, 2, BLACK);
         drawCircle(yPos, xPos, 2, BLUE);
     }
@@ -395,20 +390,6 @@ void main()
     // Reset the peripheral
     //
     MAP_PRCMPeripheralReset(PRCM_GSPI);
-
-#if MASTER_MODE
-
-    MasterMain();
-
-#else
-    printf("nothing here\n");
-
-#endif
-
-    while(1)
-    {
-
-    }
-
+    ballMain();
 }
 
