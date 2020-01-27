@@ -24,63 +24,37 @@
 //*****************************************************************************
 
 void writeCommand(unsigned char c) {
-
-//TODO 1
-/* Write a function to send a command byte c to the OLED via
-*  SPI.
-*/
-    unsigned long dummy;
+    unsigned long temp;
     volatile unsigned long delay;
     GPIOPinWrite(GPIOA0_BASE, 0x40, 0); //set OLEDCS low
     GPIOPinWrite(GPIOA0_BASE, 0x20, 0); //set DC low for command
     MAP_SPICSEnable(GSPI_BASE);
-    //Send data byte c into the OLED
-    MAP_SPIDataPut(GSPI_BASE, c);
+    
+    MAP_SPIDataPut(GSPI_BASE, c); //Send data byte c into the OLED
     for(delay=0; delay<100; delay=delay+1);
-    //Clear buffer by storing into dummy variable
-    MAP_SPIDataGet(GSPI_BASE, &dummy);
-    //
-    // Disable chip select. This is necessary
-//    if there are multiple slaves
+    MAP_SPIDataGet(GSPI_BASE, &temp); //Clear buffer by storing into dummy variable
+
     MAP_SPICSDisable(GSPI_BASE);
 
 }
 //*****************************************************************************
 
 void writeData(unsigned char c) {
-
-//TODO 2
-/* Write a function to send a data byte c to the OLED via
-*  SPI.
-*/
-
     unsigned long temp;
     volatile unsigned long delay;
     GPIOPinWrite(GPIOA0_BASE, 0x40, 0); //set OLEDCS low
     GPIOPinWrite(GPIOA0_BASE, 0x20, 0x20); //set DC high for
     MAP_SPICSEnable(GSPI_BASE);
-    //Send data byte c into the OLED
-    MAP_SPIDataPut(GSPI_BASE, c);
+    
+    MAP_SPIDataPut(GSPI_BASE, c); //Send data byte c into the OLED
     for(delay=0; delay<100; delay=delay+1);
-    //store into dummy variable
-    MAP_SPIDataGet(GSPI_BASE, &temp);
-    //
-    // Disable chip select. This is necessary if there are multiple slaves
-    //
+    MAP_SPIDataGet(GSPI_BASE, &temp); //store into dummy variable
+
     MAP_SPICSDisable(GSPI_BASE);
 }
 
 //*****************************************************************************
  void Adafruit_Init(void){
-
-//TODO 3
-/* NOTE: This function assumes that the RESET pin of the 
-*  OLED has been wired to GPIO28, pin 18 (P2.2). If you 
-*  use a different pin for the OLED reset, then you should
-*  update the GPIOPinWrite commands below that set RESET 
-*  high or low.
-*/
-
   volatile unsigned long delay;
 
   GPIOPinWrite(GPIOA3_BASE, 0x10, 0);	// RESET = RESET_LOW
