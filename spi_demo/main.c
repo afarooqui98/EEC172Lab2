@@ -378,15 +378,6 @@ void main()
     ClearTerm();
 
     //
-    // Display the Banner
-    //
-    Message("\n\n\n\r");
-    Message("\t\t   ********************************************\n\r");
-    Message("\t\t        CC3200 SPI Demo Application  \n\r");
-    Message("\t\t   ********************************************\n\r");
-    Message("\n\n\n\r");
-
-    //
     // Reset the peripheral
     //
     MAP_PRCMPeripheralReset(PRCM_GSPI);
